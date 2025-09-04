@@ -1,0 +1,18 @@
+vlan batch 10 to 13
+
+interface Ethernet0/0/1
+ port link-type access
+ port default vlan 11
+
+interface Ethernet0/0/17
+ port link-type access
+ port default vlan 10
+
+interface GigabitEthernet0/0/1
+ port link-type trunk
+ port trunk allow-pass vlan 10 to 13
+
+interface GigabitEthernet0/0/2
+ port link-type trunk
+ port trunk allow-pass vlan 10 to 13
+
