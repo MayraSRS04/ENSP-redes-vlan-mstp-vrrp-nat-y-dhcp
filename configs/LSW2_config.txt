@@ -1,0 +1,53 @@
+stp instance 1 root secondary
+stp instance 2 root primary
+
+stp region-configuration
+ region-name huawei
+ instance 1 vlan 10 to 11
+ instance 2 vlan 12 to 13
+ active region-configuration
+
+interface Vlanif9
+ ip address 192.168.1.5 255.255.255.240
+
+interface Vlanif10
+ ip address 10.0.0.3 255.255.255.0
+ vrrp vrid 10 virtual-ip 10.0.0.1
+ dhcp select relay
+ dhcp relay server-ip 10.0.1.11
+
+interface Vlanif11
+ ip address 192.168.0.3 255.255.255.0
+ vrrp vrid 11 virtual-ip 192.168.0.1
+ dhcp select relay
+ dhcp relay server-ip 10.0.1.11
+
+interface Vlanif12
+ ip address 172.16.0.3 255.255.255.0
+ vrrp vrid 12 virtual-ip 172.16.0.1
+ vrrp vrid 12 priority 120
+ dhcp select relay
+ dhcp relay server-ip 10.0.1.11
+
+interface Vlanif13
+ ip address 10.0.1.3 255.255.255.0
+ vrrp vrid 13 virtual-ip 10.0.1.1
+ vrrp vrid 13 priority 120
+
+interface GigabitEthernet0/0/1
+ port link-type access
+ port default vlan 9
+
+interface GigabitEthernet0/0/2
+ port link-type trunk
+ port trunk allow-pass vlan 10 to 13
+
+interface GigabitEthernet0/0/3
+ port link-type trunk
+ port trunk allow-pass vlan 10 to 13
+
+interface GigabitEthernet0/0/24
+ port link-type trunk
+ port trunk allow-pass vlan 9 to 13
+
+ip route-static 0.0.0.0 0.0.0.0 192.168.1.2
